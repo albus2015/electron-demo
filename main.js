@@ -15,25 +15,28 @@ function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({ width: 1366, height: 768 })
 
-    // and load the index.html of the app.
-    mainWindow.loadURL("http://www.baidu.com/")
+	// and load the index.html of the app.
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'index.html'),
+        protocol: 'file:',
+        slashes: true
+    }))
 	
-	mainWindow.webContents.on('did-get-response-details', (event, item, originalURL) => {
-        console.log("--- " + originalURL);
-    });
+	//mainWindow.webContents.on('did-get-response-details', (event, item, originalURL) => {
+    //    console.log("--- " + originalURL);
+    //});
 	
 	mainWindow.webContents.session.webRequest.onSendHeaders((details, callback) => {
         console.log("+++ " + details.url);
     })
-
-    // Open the DevTools.
-    mainWindow.webContents.openDevTools()
+	
+	// 当页面加载完成时，会触发`did-finish-load`事件。
+    mainWindow.webContents.on('did-finish-load', () => {
+		//mainWindow.close();
+    });
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
-        // Dereference the window object, usually you would store windows
-        // in an array if your app supports multi windows, this is the time
-        // when you should delete the corresponding element.
         mainWindow = null
     })
 }
@@ -41,20 +44,15 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
+app.commandLine.appendSwitch("--disable-http-cache");
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
-    // On OS X it is common for applications and their menu bar
-    // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
+	app.quit()
 })
 
 app.on('activate', function() {
-    // On OS X it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
         createWindow()
     }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .iframe {
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .iframe-operate {
+            background-color: #3c3f41;
+            border-radius: 3px;
+            width: 160px;
+            height: 50px;
+            border: none;
+        }
+
+        .operate {
+            position: fixed;
+            top: 50px;
+            right: 5px;
+            background-color: #3c3f41;
+            border-radius: 3px;
+        }
+
+        .row {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .textarea {
+            padding: 3px 3px 3px 5px;
+            height: 50px;
+            border-radius: 3px;
+            width: 160px;
+        }
+
+        .p {
+            color: #fff;
+            font-size: 12px;
+            text-align: left;
+        }
+
+        .btn {
+            display: inline-block;
+            width: 100px;
+            line-height: 32px;
+            text-align: center;
+            border-radius: 3px;
+            background-color: #1e1e1e;
+            color: #9cdcfe;
+            border: none;
+            font-size: 12px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+<iframe class="iframe" src="" frameborder="0" id="targetIframe"></iframe>
+
+<div class="operate">
+    <div class="row">
+        <textarea class="textarea" id="inputUrl"></textarea>
+        <p class="p">备注：</p>
+    </div>
+	
+    <div class="row">
+        <a class="btn" id="op_ipv4">ipv4</a>
+    </div>
+    <div class="row">
+        <a class="btn" id="op_ipv6">ipv6</a>
+    </div>
+
+    <div class="row">
+        <p class="p">操作反馈：</p>
+        <iframe class="iframe-operate" id="setApi" src=""></iframe>
+    </div>
+</div>
+
+<script>  
+	function refreshFunc(suf) {
+		var textarea = document.getElementById('inputUrl');
+        var val = textarea.value;
+		
+		val = val.replace(/:\/\/(.*?)\//, "://$1"+suf+"/");
+
+		var iframe = document.getElementById('targetIframe');
+        iframe.setAttribute('src', val);
+	}
+
+	document.getElementById('op_ipv4').onclick = function () {
+		refreshFunc("")
+    }
+	document.getElementById('op_ipv6').onclick = function () {
+		refreshFunc(".r1.ipv6.com")
+    }
+</script>
+</body>
+
+</html>
